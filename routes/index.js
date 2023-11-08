@@ -11,7 +11,7 @@ router.post('/', (req, res) => {
     return
   }
   const { departure, arrival, date } = req.body;
-  Trip.find({ departure: departure, arrival: arrival }).then(data => {
+  Trip.find({ departure: { $regex: new RegExp(departure, "i") }, arrival: { $regex: new RegExp(arrival, "i") } }).then(data => {
     if (data.length === 0) {
       res.json({ result: false, error: "No trips found with these parameters" });
       return;
