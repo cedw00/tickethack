@@ -5,7 +5,6 @@ const BookedTrip = require('../models/bookedTrips');
 const { checkBody } = require('../modules/checkBody');
 
 router.post('/', (req, res) => {
-    BookedTrip.deleteMany({}).then();
     if (!checkBody(req.body, ['departure', 'arrival', 'date'])) {
         res.json({ result: false, error: 'Missing or empty fields' });
         return
