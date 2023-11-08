@@ -2,8 +2,14 @@ var express = require('express');
 var router = express.Router();
 
 const CartTrip = require('../models/cartTrips');
+const { checkBody } = require('../modules/checkBody');
 
 router.post('/', (req, res) => {
+    CartTrip.deleteMany({}).then();
+    if (!checkBody(req.body, ['departure', 'arrival', 'date'])) {
+        res.json({ result: false, error: 'Missing or empty fields' });
+        return
+    }
     CartTrip.findOne({
         departure: { $regex: new RegExp(req.body.departure, 'i') },
         arrival: { $regex: new RegExp(req.body.arrival, 'i') },
