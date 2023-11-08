@@ -6,7 +6,7 @@ const BookedTrip = require('../models/bookedTrips');
 router.get('/', (req, res) => {
     BookedTrip.find().then(allBookedTrip => {
         if (allBookedTrip.length !== 0) {
-            res.json({ result: true, booked: allBookedTrip.filter(e => e.isBooked === true) });
+            res.json({ result: true, booked: allBookedTrip.filter(e => e.isBooked !== false) });
         } else {
             res.json({ result: false, error: "No booked trips found" });
         }

@@ -16,15 +16,21 @@ router.post('/', (req, res) => {
         date: req.body.date,
         price: req.body.price,
     }).then(data => {
-        const { departure, arrival, date, price } = req.body;
-        const newBookedTrip = new BookedTrip({
+        if (data === null) {
+            const { departure, arrival, date, price } = req.body;
+            const newBookedTrip = new BookedTrip({
             departure: departure,
             arrival: arrival,
             date: date,
             price: price,
-        });
-        newBookedTrip.save();
-        res.json({ result: true, newTrip: newBookedTrip});
+            isBooked: false,
+            });
+            newBookedTrip.save();
+            res.json({ result: true, newTrip: newBookedTrip});
+        } else {
+            res.json({ result: false, error: 'Already in cart' });
+            return
+        }
     })
 });
 
