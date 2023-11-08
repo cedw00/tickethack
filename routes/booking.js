@@ -6,7 +6,6 @@ const BookedTrip = require('../models/bookedTrips');
 const CartTrip = require('../models/cartTrips');
 
 router.get('/', (req, res) => {
-    BookedTrip.deleteMany({}).then(
     CartTrip.find().then(data => {
         for (let i = 0; i < data.length; i++) {
             const newBookedTrip = new BookedTrip({
@@ -17,7 +16,7 @@ router.get('/', (req, res) => {
             });
             newBookedTrip.save();
         }
-    })).then(
+    }).then(
     CartTrip.deleteMany({})).then(
     BookedTrip.find().then(allBookedTrip => {
         if (allBookedTrip.length !== 0) {
