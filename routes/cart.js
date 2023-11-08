@@ -1,31 +1,31 @@
 var express = require('express');
 var router = express.Router();
-var moment = require('../node_modules/moment');
 
-const BookedTrip = require('../models/bookedTrips');
+const CartTrip = require('../models/cartTrips');
 
 router.post('/', (req, res) => {
-    BookedTrip.findOne({
+    CartTrip.findOne({
         departure: { $regex: new RegExp(req.body.departure, 'i') },
         arrival: { $regex: new RegExp(req.body.arrival, 'i') },
         date: req.body.date,
         price: req.body.price,
     }).then(data => {
         const { departure, arrival, date, price } = req.body;
-        const bookedTrip = new BookedTrip({
+        const newCartTrip = new CartTrip({
             departure: departure,
             arrival: arrival,
             date: date,
             price: price,
         });
-        bookedTrip.save();
-        res.json({ result: true, newTrip: bookedTrip});
+        newCartTrip.save();
+        res.json({ result: true, newTrip: newCartTrip});
     })
 });
 
 router.get('/', (req, res) => {
-    BookedTrip.find().then(data => {
+    CartTrip.find().then(data => {
         if (data.length !== 0) {
+            console.log(data)
             res.json({ result: true, booked: data });
         } else {
             res.json({ result: false, error: "No booked trip found"});
@@ -34,14 +34,14 @@ router.get('/', (req, res) => {
 })
 
 router.delete('/', (req, res) => {
-    BookedTrip.findOne({
+    CartTrip.findOne({
         departure: req.body.departure,
         arrival: req.body.arrival,
         price: req.body.price,
     }).then(data => {
         if (data) {
-            BookedTrip.deleteOne({ _id: data._id }).then(booked => {
-                BookedTrip.find().then(newBooked => {
+            CartTrip.deleteOne({ _id: data._id }).then(booked => {
+                CartTrip.find().then(newBooked => {
                     res.json({ result: true, newBooked: newBooked });
                 })
             })
